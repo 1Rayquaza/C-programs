@@ -1,0 +1,20 @@
+//function for balanced brackets
+string isBalanced(string s) {
+    unordered_map<char, int> m = {{'[', -1}, {'{', -2}, {'(', -3}, 
+                                  {']', 1}, {'}', 2}, {')', 3}};  //assigning no.s. for simplicity
+    stack<char> st;
+    for(char bracket:s){
+        if(m[bracket]<0){ //opening-type
+            st.push(bracket);
+        }
+        else{   //closing-type bracket
+            if(st.empty()) return "NO";  //needs opening bracket for balance so stack cannot be empty
+            char top = st.top();
+            st.pop();   //value already stored in top, balanced with the other, no need anymore
+            if( m[bracket]+m[top] != 0) return "NO";    //key in a map is unique
+        }
+    }
+    if(st.empty()) return "YES";  //***
+    return "NO";
+      
+}
