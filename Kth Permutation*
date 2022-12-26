@@ -1,0 +1,34 @@
+int firstDigitIndex(int N, long &k){ //'cause we need to keep updating k as per sub-sets
+    //to get the position of first digit
+    if(N==1){
+        return 0;   //we're returning indices
+    }
+    /* k/(n-1)! was leading to 1-based indexing position of element in the set, but set and vector are 
+    zero-based so issuesss, hence we did k-- */
+    long fact = N-1;
+    while((k >= fact) && N>2){  //n-- -> n-1 --> 0, problem ! so-
+        N--;
+        fact = fact*(long)(N-1);
+    }
+    long index = k/fact;
+    k = k%fact;
+    return index;
+}
+
+vector<int> Solution::findPerm(int N, long k) {   //recursive problem 
+    k--;    // 0-based indexing
+    set<int> s;
+    for(int i=0; i<N; i++){
+        s.insert(i+1);
+    }
+    
+    vector<int> ans;
+    for(int i=N; i>0; i--){
+        auto it = s.begin();
+        int index = firstDigitIndex(i, k);
+        advance(it, index);
+        ans.push_back((*it));
+        s.erase(it);  //it -> delete index, *it -> deletes value
+    }
+    return ans;
+}
