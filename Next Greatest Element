@@ -19,7 +19,37 @@ void NGE(vector<int> &v, vector<int> &nge){
     }
     //return nge; to avoid extra computation and memory power, pass by referance(hence, return-type void)
 }
+    
+    //for circular array
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        int n = nums.size();
+        //copy and add array nums to array nums for circular element
+        for(int i=0; i<n; i++){
+            nums.push_back(nums[i]);
+        }
+        //perform NGE on this modified array nums
+        vector<int> nge(2*n);
+        stack<int> st;
+        for(int i=0; i<2*n; i++){
+            while(!st.empty() && nums[i]>nums[st.top()]){
+                nge[st.top()] = nums[i];
+                st.pop();
+            }
+            st.push(i); //elements can be stored through their indices later as they are unique
+        }
 
+        while(!st.empty()){
+            nge[st.top()] = -1;
+            st.pop();
+        }
+
+        vector<int> circ;
+        for(int i=0; i<n; i++){
+            circ.push_back(nge[i]);
+        }
+        return circ;
+    }
+    
 int main() {
     int n;
     cin >> n;
